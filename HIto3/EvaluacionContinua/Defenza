@@ -1,0 +1,154 @@
+CREATE DATABASE defensa_hito3_2023;
+USE defensa_hito3_2023;
+
+#1ra pregunta
+#Crear una funcion que reciba una dato de tipo string, el dato string ingresado se le borran las consonantes y vocales
+
+CREATE OR REPLACE FUNCTION mantiene_vocales(palabra VARCHAR(255))
+RETURNS TEXT
+BEGIN
+  DECLARE i INT DEFAULT 1;
+  DECLARE resultado VARCHAR(255) DEFAULT '';
+  DECLARE letra CHAR(1);
+  WHILE i <= LENGTH(palabra) DO
+    SET letra = SUBSTRING(palabra, i, 1);
+    IF letra IN ('a', 'e', 'i', 'o', 'u') THEN
+      SET resultado = CONCAT(resultado, letra);
+    END IF;
+    SET i = i + 1;
+  END WHILE;
+  RETURN resultado;
+END;
+
+SELECT mantiene_vocales('a cuanto cuestan 100 huevos');
+
+
+#2da pregunta
+#crear la tabla CLIENTES(id_PRIMARY KEY, fullname VARCAHR(20), last_name VARCAHR(20), age INT, genero CHAR(1)femenino o masculino) y por ultimo agregar a la tabla 3 registros
+
+CREATE TABLE CLIENTES (
+  id INT PRIMARY KEY,
+  fullname VARCHAR(20),
+  last_name VARCHAR(20),
+  age INT,
+  genero CHAR(1)
+);
+
+INSERT INTO CLIENTES (id, fullname, last_name, age, genero) VALUES
+  (1, 'Juan', 'Pérez', 30, 'm'),
+  (2, 'María', 'García', 25, 'f'),
+  (3, 'Pedro', 'López', 40, 'm');
+
+SELECT *
+FROM CLIENTES;
+
+#Crear una funcion que obtenga la edad MAxima de los CLIENTES, la funcion no recive ningun parametro y la funcion debe retornar un numero que es la edad
+
+CREATE OR REPLACE FUNCTION obtener_edad_maxima()
+RETURNS INT
+BEGIN
+  DECLARE edad_maxima INT;
+  SELECT MAX(age) INTO edad_maxima FROM CLIENTES;
+  RETURN edad_maxima;
+END;
+
+SELECT obtener_edad_maxima();
+
+#Crear una funcion que maneje la funcion previamnete creadasi la edad maxima es par mostrar todos os pares empezando desde 0 a el numeor de la edad maxima
+
+CREATE OR REPLACE FUNCTION paresimpares()
+RETURNS TEXT
+BEGIN
+  DECLARE edad_maxima INT;
+  DECLARE resultado VARCHAR(100) DEFAULT '';
+  DECLARE i INT DEFAULT 0;
+  SET edad_maxima = obtener_edad_maxima();
+
+  WHILE i <= edad_maxima DO
+    IF i % 2 = 0 THEN
+      SET resultado = CONCAT(resultado, i, ' ');
+    END IF;
+    SET i = i + 2;
+  END WHILE;
+  RETURN resultado;
+END;
+SELECT paresimpares();
+
+#ejercicio 3
+#Crear una funcion que genere la serie fibonacci, la funcion recibe un limite (number) y la funcion debe retornar una cadena
+
+CREATE OR REPLACE FUNCTION generar_serie_fibonacci(limite INT)
+RETURNS TEXT
+BEGIN
+  DECLARE a INT DEFAULT 0;
+  DECLARE b INT DEFAULT 1;
+  DECLARE c INT;
+  DECLARE resultado VARCHAR(255) DEFAULT '';
+
+  IF limite <= 0 THEN
+    SET resultado = 'Ingrese un límite mayor que cero';
+  ELSEIF limite = 1 THEN
+    SET resultado = '0';
+  ELSE
+    SET resultado = '0 1';
+
+    WHILE b < limite DO
+      SET c = a + b;
+      SET resultado = CONCAT(resultado, ' ', c);
+      SET a = b;
+      SET b = c;
+    END WHILE;
+  END IF;
+
+  RETURN resultado;
+END;
+
+SELECT generar_serie_fibonacci(7);
+
+#crear una funcion que reciba 3 parametros parametro de tipo STRING, la funcion debe llamarse reemplaza_palabra el primer parametro es la cadena principal, el segundo parametro es la palabra a reemplazar y el tercer parametro es la nueva palabra que remplace la anterior
+CREATE OR REPLACE FUNCTION reemplaza_palabra(cad_princ VARCHAR(100), pa_reemp VARCHAR(100), pa_nue VARCHAR(100  ))
+RETURNS VARCHAR(150)
+BEGIN
+  DECLARE resultado VARCHAR(150) DEFAULT '';
+  DECLARE i INT DEFAULT 1;
+  DECLARE aux_cadena_principal INT;
+  DECLARE aux_palabra_vieja INT;
+
+  SET aux_cadena_principal = LENGTH(cad_princ);
+  SET aux_palabra_vieja = LENGTH(pa_reemp);
+
+  WHILE i <= aux_cadena_principal DO
+    IF SUBSTRING(cad_princ, i, aux_palabra_vieja) = pa_reemp THEN
+      SET resultado = CONCAT(resultado, pa_nue);
+      SET i = i + aux_palabra_vieja;
+    ELSE
+      SET resultado = CONCAT(resultado, SUBSTRING(cad_princ, i, 1));
+      SET i = i + 1;
+    END IF;
+  END WHILE;
+
+  RETURN resultado;
+END;
+
+SELECT reemplaza_palabra('Hola como estan todos ustedes amigos','hola','adios');
+
+#Crear una funcion que reciba un parametro de tipo TEXT , la funcion retorna la cadena al revex
+
+CREATE OR REPLACE FUNCTION alrevez(cadena TEXT)
+RETURNS TEXT
+BEGIN
+  DECLARE longcad INT;
+  DECLARE i INT DEFAULT 0;
+  DECLARE resultado TEXT DEFAULT '';
+
+  SET longcad = LENGTH(cadena);
+
+  WHILE i < longcad DO
+    SET resultado = CONCAT(SUBSTRING(cadena, i+1, 1), resultado);
+    SET i = i + 1;
+  END WHILE;
+  RETURN resultado;
+END;
+
+SELECT alrevez('dba II 2023');
+
