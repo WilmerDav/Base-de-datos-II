@@ -1,0 +1,109 @@
+#PARTE PRACTICA
+
+CREATE DATABASE practica_H3; #ejecuta primero
+USE practica_H3; #ejecuta 2dO
+
+
+/*pregunta 3 PARTES DE UNA FUNCION
+
+CREATE FUNCTION nombre_de_la_funcion()  #nombre de la funcion, y los parentesis reciben parametros
+RETURNS TIPO_DE_DATO;                    #EL TIPO DE DATO CON EL QUE TRABAJARA LA FUNCION
+    BEGIN                               #INICIO DEW LA FUNCION
+
+        RETURN X                        #RETORNA UN VALOR QUE SE MOSTRARA EN CONSOLA
+        END;                            #FIN DE LA FUNCION*/
+
+
+#PREGUNTA 4, MODIFICAR Y ELIMINAR UNA FUNCION
+
+#PARA MODIFICAR UNA FUNCION DE DEBE DE ESCRIBIR ENTRE EL MEDIO0 DE CREATE FUNCTION
+#"OR REPLACE" ASI MODIFICARA LA FUNCION
+
+CREATE OR REPLACE FUNCTION funcion_1()
+RETURNS TEXT
+BEGIN
+    declare A VARCHAR(20);
+    SET A = 'holA mundo';
+    RETURN A;
+    END;
+
+#PARA ELIMINAR SE DEBE ESCRIBIR LO SIGUIENTE:
+
+DROP FUNCTION funcion_1; #DROP FUNCTION [NOMBRE DE LA FUNCION]
+
+
+#PREGUNTA 5, CONCATENAR 3 CADENAS
+CREATE FUNCTION CONCATENAR_3_CAD()
+    RETURNS TEXT
+    BEGIN
+        declare cad1 TEXT; #DECLARANDO VARIABLES
+
+        declare cad2 TEXT;
+
+        declare cad3 TEXT;
+
+        declare con_equ TEXT;
+
+        set con_equ = (SELECT concat(cad1,cad2,cad3)); #usando concar para fusionar 3 valores
+        return con_equ;
+    end;
+
+
+
+
+#PREGUNTA 6, PARA QUE SIRVE SUBSTRING
+
+CREATE FUNCTION uso_substring_v2(nombre_xi TEXT)
+RETURNS TEXT
+BEGIN
+
+    DECLARE var_1 TEXT;
+
+    SET var_1 = (SELECT SUBSTRING(nombre_xi, 1,6)); #usando el SUBSTRING para contar la cantidad de
+    #caracteres en una cadena, el 1 sirve para inicializar de donde empezara, y el 6 donde termina
+    RETURN var_1;
+    END;
+
+
+SELECT uso_substring_v2('Paco Palacio Perez'); #ejecutando
+
+#ejercicio 7
+
+CREATE OR REPLACE FUNCTION comparar_cadenas(cadena1 TEXT, cadena2 TEXT, cadena3 TEXT)
+RETURNS VARCHAR(10)
+BEGIN
+
+    DECLARE resultado INT DEFAULT 0;
+    DECLARE resultado2 INT DEFAULT 0;
+
+    SET resultado = STRCMP(cadena1, cadena2); #usando el STRCMP para returnar un valor buleano
+    SET resultado2 = STRCMP(cadena1, cadena3);
+
+    IF resultado = 0 THEN
+        RETURN 'Cadena 1 y Cadena 2 son iguales';
+    ELSEIF resultado2 = 0 THEN
+        RETURN 'Cadena 1 y Cadena 3 son iguales';
+    ELSEIF STRCMP(cadena2, cadena3) = 0 THEN
+        RETURN 'Cadena 2 y Cadena 3 son iguales';
+    ELSE
+        RETURN 'Ninguna cadena es igual a otra';
+    END IF;
+
+END;
+
+SELECT comparar_cadenas('hola','jose','cmon');
+
+
+#ejer 8
+
+CREATE OR REPLACE FUNCTION locat()
+RETURNS VARCHAR(100)
+BEGIN
+
+    DECLARE var1 TEXT;
+
+    SET  var1= (SELECT LOCATE('ama','luis ama a luisa'));
+    return var1;
+    END;
+
+SELECT locat()
