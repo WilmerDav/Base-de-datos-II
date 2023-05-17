@@ -1,0 +1,145 @@
+CREATE DATABASE lab1_hito4;
+USE lab1_hito4;
+
+DROP database lab1_hito4;
+#/////   TRIGERS CONCEPTOS  ///
+
+# SE EJECUTA DE MANERA AUTOMATICA
+# CUANDO SE EJECUTA? CUANDO OCUYRRE LOS SIGUIENTES EVENTOS : INSERT, UPDATE O DELETE
+# ES DECIR, CADA VEZ QUE INSERTO, MODIFICO O ELIMINO EL REGISTRO DE UNA TABLA
+# POR CONSIGUIENTE UN TRIGGER SIEMPRE SE APLICA A UNA TABLA
+
+# UN TRIGGER PUEDE ACCEDER A TODOS LOS CAMPOS DE UNA TABLA
+# Y LO HACE ATRAVES DE LOS OBJETOS NEW Y OLD
+# NEW = INSERT
+# OLD = DELETE
+# NEW Y OLD = UPDATE
+
+/*
+CREATE OR REPLACE TRIGGER -Nombredeltrigger-
+    BEFORE INSERT ON -nombredelatabla-
+    FOR EACH ROW
+    BEGIN
+        SET NEW.PASSWORD=CONCAT(SUBSTRING(NEW.FULLNAME,1,2),SUBSTRING(NEW.LASTNAME,1,2),NEW.AGE);
+    END;
+*/
+
+/*CREAMOS UNA TABLA, YA QUE LOS TIRIGGER S FUNCIONAN CON TABLAS*/
+CREATE TABLE NUMEROS (
+    NUMERO BIGINT PRIMARY KEY NOT NULL ,
+    CUADRADO BIGINT,
+    CUBO BIGINT,
+    RAIZCUADRADA REAL,
+    SUMATODO REAL
+);
+INSERT INTO numeros
+    (numero) VALUES (2);
+
+
+#///////         TRIGGER      ////////////
+/*El trigger va a calcular el cuadrado, cubo y la raiz del numero 2*/
+
+                    #MANERA 1
+#esta manera para usar las variables para uso en funciones como if, while, loops entre otros
+
+CREATE OR REPLACE TRIGGER OP_MATEMATICAS        #nombre del triger
+    BEFORE INSERT                               #
+    ON numeros                                  #en que tabla se va a aplicar
+    FOR EACH ROW                                #se ejecuta en cada fila
+    BEGIN
+        DECLARE valor_cuadrado BIGINT;
+        DECLARE valor_cubo BIGINT;
+        DECLARE valor_raiz REAL;
+
+        SET valor_cuadrado=power(NEW.NUMERO,2);
+        SET valor_cubo=power(NEW.NUMERO,3);
+        SET valor_raiz=sqrt(NEW.NUMERO);
+
+        SET NEW.CUADRADO=valor_cuadrado;
+        SET NEW.CUBO=valor_cubo;
+        SET NEW.RAIZCUADRADA=valor_raiz;
+    END;
+                                                   #ya tenemos ejecutado el trigger
+INSERT INTO NUMEROS (NUMERO)VALUES (3);            #ingresamos un dato dentro de la tabla en la fila de numeros y ya usa el trigger apra calcular el cuadrado, cubo y raiz
+
+SELECT * FROM NUMEROS;
+
+                #MANERA 2
+#agilisada para el tr
+CREATE OR REPLACE TRIGGER OP_MATEMATICAS2
+    BEFORE INSERT ON NUMEROS
+    FOR EACH ROW
+    BEGIN
+       SET NEW.CUADRADO=power(NEW.NUMERO,2);
+       SET NEW.CUBO=power(NEW.NUMERO,3);
+       SET NEW.RAIZCUADRADA=sqrt(NEW.NUMERO);
+    END;
+
+INSERT INTO NUMEROS (NUMERO)VALUES (9);
+
+
+SELECT * FROM NUMEROS;
+drop trigger OP_MATEMATICAS;
+drop trigger OP_MATEMATICAS2;
+#Ejercicio
+#Eliminar todos los registros de la tabla numeros
+#agregar un nuevo campo (suma_total REAL) a la tabla numero, esta refleja la suma de las otras columanas en la tabla(cuadrado, cubio y raiz
+#eliminar el triguer anterior y crear otro que resuleva el problema modificado
+
+CREATE OR REPLACE TRIGGER nueva_op       #nombre del triger
+    BEFORE INSERT                               #
+    ON NUMEROS                                  #en que tabla se va a aplicar
+    FOR EACH ROW                                #se ejecuta en cada fila
+    BEGIN
+        DECLARE valor_cuadrado BIGINT;
+        DECLARE valor_cubo BIGINT;
+        DECLARE valor_raiz REAL;
+
+        SET valor_cuadrado=power(NEW.NUMERO,2);
+        SET valor_cubo=power(NEW.NUMERO,3);
+        SET valor_raiz=sqrt(NEW.NUMERO);
+
+        SET NEW.CUADRADO=valor_cuadrado;
+        SET NEW.CUBO=valor_cubo;
+        SET NEW.RAIZCUADRADA=valor_raiz;
+        SET NEW.SUMATODO=NEW.CUADRADO+NEW.CUBO+NEW.RAIZCUADRADA+NEW.NUMERO;
+        END;
+                                                   #ya tenemos ejecutado el trigger
+INSERT INTO NUMEROS (NUMERO)VALUES (2);            #ingresamos un dato dentro de la tabla en la fila de numeros y ya usa el trigger apra calcular el cuadrado, cubo y raiz
+
+SELECT * FROM NUMEROS;
+
+#EJER 2
+
+CREATE TABLE USUARIOS (
+    ID_USR INT PRIMARY KEY NOT NULL,
+    NOMBRES VARCHAR(50) NOT NULL,
+    APELLIDOS VARCHAR(50) NOT NULL,
+    EDAD INT NOT NULL,
+    CORREO VARCHAR(100) NOT NULL,
+    PASSWORDS VARCHAR(200)
+);
+
+CREATE OR REPLACE TRIGGER GENERANDO_PASSWORD
+BEFORE INSERT ON USUARIOS
+FOR EACH ROW
+BEGIN
+    DECLARE nombre_corto VARCHAR(100);
+    DECLARE apellido_corto VARCHAR(100);
+    DECLARE password_generado VARCHAR(200);
+
+    SET nombre_corto = (SUBSTR(NEW.NOMBRES, 1,2));
+    SET apellido_corto = (SUBSTR(NEW.APELLIDOS, 1, 2));
+    SET password_generado = CONCAT(nombre_corto, apellido_corto, NEW.EDAD);
+
+    SET NEW.PASSWORDS = password_generado;
+END;
+
+INSERT INTO USUARIOS (ID_USR, NOMBRES, APELLIDOS, EDAD, CORREO)
+VALUES (5, 'PATRICIO', 'ESTRELLA', 28, 'correo@example298.com');
+
+SELECT * FROM   USUARIOS;
+
+
+
+
