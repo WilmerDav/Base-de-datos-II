@@ -30,7 +30,7 @@
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/hito2"> <br></br> ➢Laboratorios Hito 2 </A>**
 
-**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/hito2_procesual"> <br></br> ➢Trabajo Rrocesual Hito 2 </A>**
+**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/hito2_procesual"> <br></br> ➢Trabajo Procesual Hito 2 </A>**
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/blob/main/hito2_procesual/EvaluacionProcesual_Gupal_Aula.sql"> <br></br> ➢Examen en Aula Hito 2 </A>**
 
@@ -46,7 +46,7 @@
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/HIto3/Laboratorios"> <br></br> ➢Laboratorios Hito 3 </A>**
 
-**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/HIto3/Evalucion%20Procesual"> <br></br> ➢Trabajo Rrocesual Hito 3 </A>**
+**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/HIto3/Evalucion%20Procesual"> <br></br> ➢Trabajo Procesual Hito 3 </A>**
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/HIto3/EvaluacionContinua"> <br></br> ➢Examen en Aula Hito 3 </A>**
 
@@ -62,7 +62,7 @@
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/Hito4/Laboratorios"> <br></br> ➢Laboratorios Hito 4 </A>**
 
-**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/Hito4/Defenza%20Hito%204"> <br></br> ➢Trabajo Rrocesual Hito 4 </A>**
+**<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/Hito4/Defenza%20Hito%204"> <br></br> ➢Trabajo Procesual Hito 4 </A>**
 
 **<A href="https://github.com/WilmerDav/Base-de-datos-II/tree/main/Hito4/Evaluacion%20en%20Aula"> <br></br> ➢Examen en Aula Hito 4 </A>**
 
