@@ -1,0 +1,115 @@
+CREATE DATABASE Lab2_Hito3;
+USE Lab2_Hito3;
+
+CREATE TABLE USUARIOS (
+    ID_USR INT PRIMARY KEY NOT NULL auto_increment,
+    NOMBRES VARCHAR(50) NOT NULL,
+    APELLIDOS VARCHAR(50) NOT NULL,
+    FECHA_NAC DATE NOT NULL,
+    CORREO VARCHAR(100) NOT NULL,
+    PASSWORDS VARCHAR(200),
+    EDAD int
+);
+
+CREATE OR REPLACE TRIGGER calcular_pas_edad
+BEFORE INSERT ON USUARIOS
+FOR EACH ROW
+BEGIN
+    SET NEW.EDAD = TIMESTAMPDIFF(YEAR, NEW.FECHA_NAC, CURDATE());
+
+    SET NEW.PASSWORDS = LOWER(CONCAT(
+        SUBSTR(NEW.NOMBRES, 1, 2),
+        SUBSTR(NEW.APELLIDOS, 1, 2),
+        SUBSTR(NEW.CORREO, 1, 2),
+        NEW.EDAD
+    ));
+END;
+
+INSERT INTO USUARIOS (ID_USR, NOMBRES, APELLIDOS, CORREO, FECHA_NAC)
+VALUES (3, 'JUAN', 'CASA', 'PABLO@example.com', '2000-06-07');
+
+SELECT * from USUARIOS;
+
+DROP trigger calcular_pas_edad;
+DROP TABLE USUARIOS;
+
+#CreAR UN TRIGGER PARA LA ABLA USUARIOS QUE VERIFICA QUE EL PASWORD QUE SE INGRESA SON MAS DE 10 CARACTERES SE DEJA TAL CUAL , CASO CONTRARIO EN EL PASWORD SE TOMAN LOS DOS ULTIMOS CARACTERES DEL NOOBRE, APELLIDO Y EDAD
+
+CREATE OR REPLACE TRIGGER verificar_longitud_password
+BEFORE INSERT ON USUARIOS
+FOR EACH ROW
+BEGIN
+    SET NEW.EDAD = TIMESTAMPDIFF(YEAR, NEW.FECHA_NAC, CURDATE());
+    IF LENGTH(NEW.PASSWORDS) < 10 THEN
+        SET NEW.PASSWORDS = CONCAT(
+            SUBSTR(NEW.NOMBRES, LENGTH(NEW.NOMBRES) - 1, 2),
+            SUBSTR(NEW.APELLIDOS, LENGTH(NEW.APELLIDOS) - 1, 2),
+            NEW.EDAD
+        );
+    END IF;
+END;
+
+
+INSERT INTO USUARIOS (NOMBRES, APELLIDOS, CORREO, FECHA_NAC, PASSWORDS)
+VALUES ('polo', 'nando', 'marcos@example.com', '2000-05-10', 'pas');
+
+SELECT * FROM USUARIOS;
+
+DROP TRIGGER verificar_longitud_password;
+
+#Mensaje para cerrar base dedatos
+
+CREATE TRIGGER mantenimiento
+BEFORE insert on USUARIOS
+FOR EACH ROW
+    BEGIN
+        DECLARE diadelasemana TEXT DEFAULT '';
+        SET diadelasemana=dayname(CURRENT_DATE);
+
+        if diadelasemana = 'Wednesday'
+            THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Base de datos en mantenimiento';
+        end if;
+    end;
+INSERT INTO USUARIOS (NOMBRES, APELLIDOS, CORREO, FECHA_NAC, PASSWORDS)
+VALUES ('polo', 'nando', 'marcos@example.com', '2000-05-10', 'pas');
+
+DROP table USUARIOS;
+DROP TRIGGER mantenimiento;
+
+
+#
+
+CREATE TABLE USUARIOS (
+    ID_USR INT PRIMARY KEY NOT NULL auto_increment,
+    NOMBRES VARCHAR(50) NOT NULL,
+    APELLIDOS VARCHAR(50) NOT NULL,
+    FECHA_NAC DATE NOT NULL,
+    CORREO VARCHAR(100) NOT NULL,
+    PASSWORDS VARCHAR(200),
+    EDAD int,
+    NACIONALIDAD VARCHAR (90)
+);
+
+#un trigger usando lo anterior para que solo puedan meter datos los de nacionalidad Bolivia, Argentina y Paraguay. Caso contrario de el error Signal SQLSTATE '45000'usando el set mesagge text
+
+CREATE OR REPLACE TRIGGER verificar_nacionalidad
+BEFORE INSERT ON USUARIOS
+FOR EACH ROW
+BEGIN
+    DECLARE nacionalidad_valida BOOLEAN DEFAULT TRUE;
+    SET nacionalidad_valida = NEW.NACIONALIDAD IN ('Bolivia', 'Argentina', 'Paraguay');
+
+    IF NOT nacionalidad_valida THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Solo se permiten usuarios de nacionalidad Bolivia, Argentina y Paraguay.';
+    END IF;
+END;
+
+INSERT INTO USUARIOS (NOMBRES, APELLIDOS, FECHA_NAC, CORREO, PASSWORDS, EDAD, NACIONALIDAD)
+VALUES ('paul', 'marci', '1990-05-10', 'johndoe@example.com', 'password123', 30, 'Argentina');
+
+INSERT INTO USUARIOS (NOMBRES, APELLIDOS, FECHA_NAC, CORREO, PASSWORDS, EDAD, NACIONALIDAD)
+VALUES('paul', 'marci', '1990-05-10', 'johndoe@example.com', 'password123', 30, 'MEXICO');
+
+SELECT * FROM USUARIOS;
