@@ -86,33 +86,5 @@
 **WILMER DAVID CORI APAZA**
 
 
-<script>
-  function changeColor() {
-    let hito1 = document.getElementById("hito1");
-    let hito2 = document.getElementById("hito2");
-    let hito3 = document.getElementById("hito3");
-    let hito4 = document.getElementById("hito4");
-    let hito5 = document.getElementById("hito4");
-
-    setInterval(function() {
-      hito1.style.color = getRandomColor();
-      hito2.style.color = getRandomColor();
-      hito3.style.color = getRandomColor();
-      hito4.style.color = getRandomColor();
-      hito5.style.color = getRandomColor();
-    }, 1000); // Cambia el color cada segundo (1000 ms)
-
-    function getRandomColor() {
-      let letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-  }
-
-  changeColor();
-</script>
 
 
